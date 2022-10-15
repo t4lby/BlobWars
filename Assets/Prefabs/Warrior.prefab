@@ -571,7 +571,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 84
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &2173525948956150142
 MonoBehaviour:
@@ -585,6 +585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01053cc08be054c5b95e8a2a22c6e133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TeamID: 0
   HP: 50
   State: 2
   Target: {fileID: 0}
@@ -594,6 +595,7 @@ MonoBehaviour:
   AttackPower: 1
   AttackRange: 1
   AttackRate: 1
+  UnitRadius: 0.25
 --- !u!136 &-6182845372834569638
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -28,6 +28,7 @@ public class Unit : MonoBehaviour
     public float AttackPower = 1; // hp/s
     public float AttackRange = 1; // m
     public float AttackRate = 1; // attack/s
+    public float UnitRadius = 0.25f;
 
     private Animator _animator;
     private float _attackAnimLength;
@@ -37,11 +38,20 @@ public class Unit : MonoBehaviour
 
     private AttackCycle _attackCycle;
 
+    // Should be single server controller present as parent.
+    private ServerController _server;
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
         CheckAnimationClips(); // validate clips and record lengths.
+        
+    }
+
+    private void Start()
+    {
+        _server = GetComponentInParent<ServerController>();
     }
 
     private void Update()
@@ -85,13 +95,18 @@ public class Unit : MonoBehaviour
                     }
                     //qq: move over height map (when this exists) and move in direction
                     //according to pathfinding (when exists)
-                    _rigidbody.MovePosition(
-                        transform.position + Time.fixedDeltaTime * MoveSpeed *
-                        (Target.position - transform.position).normalized);
+
+                    var moveVector = transform.position + Time.fixedDeltaTime * MoveSpeed *
+                        (Target.position - transform.position).normalized;
+                    ConstrainMoveVectorToMap(ref moveVector);
+                    _rigidbody.MovePosition(moveVector);
+
+                    var lookVector = Target.position - transform.position;
+                    lookVector.y = 0;
+                    lookVector.Normalize();
 
                     _rigidbody.MoveRotation(
-                        Quaternion.LookRotation(
-                            (Target.position - transform.position).normalized));
+                        Quaternion.LookRotation(lookVector));
                     // check for attack posibility.
                     float distFromTarget = (Target.position - transform.position).magnitude;
                     if (distFromTarget < AttackRange &&
@@ -148,6 +163,15 @@ public class Unit : MonoBehaviour
                 }
 
         }
+    }
+
+    private void ConstrainMoveVectorToMap(ref Vector3 moveVector)
+    {
+        // clip vector to map and unit radius.
+        moveVector.x = Mathf.Clamp(moveVector.x, UnitRadius, _server.Map.Width - UnitRadius);
+        moveVector.z = Mathf.Clamp(moveVector.z, UnitRadius, _server.Map.Width - UnitRadius);
+        // interpolate height.
+        moveVector.y = _server.Map.GetHeight(moveVector.x, moveVector.z);
     }
 
     public bool CheckAnimationClips()

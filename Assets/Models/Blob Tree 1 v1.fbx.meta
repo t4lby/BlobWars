@@ -1,125 +1,11 @@
 fileFormatVersion: 2
-guid: 20309aeb0f7cdb546bfef7768150e194
+guid: ff09a382848314a7590afdf03ed30abe
 ModelImporter:
   serializedVersion: 20200
-  internalIDToNameTable:
-  - first:
-      1: 100000
-    second: //RootNode
-  - first:
-      1: 100002
-    second: Body1
-  - first:
-      1: 100004
-    second: Body2
-  - first:
-      1: 100006
-    second: Body3
-  - first:
-      1: 100008
-    second: Body4
-  - first:
-      1: 100010
-    second: Body5
-  - first:
-      1: 100012
-    second: Body6
-  - first:
-      1: 100014
-    second: Body7
-  - first:
-      4: 400000
-    second: //RootNode
-  - first:
-      4: 400002
-    second: Body1
-  - first:
-      4: 400004
-    second: Body2
-  - first:
-      4: 400006
-    second: Body3
-  - first:
-      4: 400008
-    second: Body4
-  - first:
-      4: 400010
-    second: Body5
-  - first:
-      4: 400012
-    second: Body6
-  - first:
-      4: 400014
-    second: Body7
-  - first:
-      21: 2100000
-    second: Steel - Satin
-  - first:
-      23: 2300000
-    second: Body1
-  - first:
-      23: 2300002
-    second: Body2
-  - first:
-      23: 2300004
-    second: Body3
-  - first:
-      23: 2300006
-    second: Body4
-  - first:
-      23: 2300008
-    second: Body5
-  - first:
-      23: 2300010
-    second: Body6
-  - first:
-      23: 2300012
-    second: Body7
-  - first:
-      33: 3300000
-    second: Body1
-  - first:
-      33: 3300002
-    second: Body2
-  - first:
-      33: 3300004
-    second: Body3
-  - first:
-      33: 3300006
-    second: Body4
-  - first:
-      33: 3300008
-    second: Body5
-  - first:
-      33: 3300010
-    second: Body6
-  - first:
-      33: 3300012
-    second: Body7
-  - first:
-      43: 4300000
-    second: Body1
-  - first:
-      43: 4300002
-    second: Body2
-  - first:
-      43: 4300004
-    second: Body3
-  - first:
-      43: 4300006
-    second: Body4
-  - first:
-      43: 4300008
-    second: Body5
-  - first:
-      43: 4300010
-    second: Body6
-  - first:
-      43: 4300012
-    second: Body7
+  internalIDToNameTable: []
   externalObjects: {}
   materials:
-    materialImportMode: 1
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -148,7 +34,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 10
+    globalScale: 5
     meshCompression: 3
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -157,7 +43,7 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
-    fileIdsGeneration: 1
+    fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -173,7 +59,7 @@ ModelImporter:
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
-    secondaryUVMarginMethod: 0
+    secondaryUVMarginMethod: 1
     secondaryUVMinLightmapResolution: 40
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
@@ -199,17 +85,17 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 10
+    globalScale: 5
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   avatarSetup: 0
-  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
