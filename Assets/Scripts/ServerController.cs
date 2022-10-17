@@ -17,7 +17,7 @@ public class ServerController : MonoBehaviour
 
     private void GenerateMap()
     {
-        Map = Map.Brownian(50, 50, 0.25f);
+        Map = Map.Brownian(50, 50, 0.5f);
         var mapGo = new GameObject("Map");
         mapGo.transform.SetParent(transform);
         var mr = gameObject.AddComponent<MeshRenderer>();

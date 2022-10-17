@@ -75,11 +75,14 @@ public class Unit : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Vector3 moveVector = transform.position;
         // Simple initial state machine
         switch (State)
         {
             case UnitState.Idle:
                 {
+                    // keep unit at correct height for map.
+                    
                     if (Target != null)
                     {
                         State = UnitState.Walk;
@@ -93,13 +96,11 @@ public class Unit : MonoBehaviour
                         State = UnitState.Idle; // transition back to idle.
                         break;
                     }
-                    //qq: move over height map (when this exists) and move in direction
+                    //move over height map and move in direction
                     //according to pathfinding (when exists)
 
-                    var moveVector = transform.position + Time.fixedDeltaTime * MoveSpeed *
+                    moveVector = transform.position + Time.fixedDeltaTime * MoveSpeed *
                         (Target.position - transform.position).normalized;
-                    ConstrainMoveVectorToMap(ref moveVector);
-                    _rigidbody.MovePosition(moveVector);
 
                     var lookVector = Target.position - transform.position;
                     lookVector.y = 0;
@@ -161,8 +162,9 @@ public class Unit : MonoBehaviour
                     }
                     break;
                 }
-
         }
+        ConstrainMoveVectorToMap(ref moveVector);
+        _rigidbody.MovePosition(moveVector);
     }
 
     private void ConstrainMoveVectorToMap(ref Vector3 moveVector)
