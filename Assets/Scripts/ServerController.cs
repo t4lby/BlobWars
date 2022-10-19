@@ -20,9 +20,13 @@ public class ServerController : MonoBehaviour
 
     private ushort _nextId = 0;
 
-    private void Start()
+    private void Awake()
     {
         GenerateMap();
+    }
+
+    private void Start()
+    {
         // Scan initially for units in scene (should always be children of server)
         var childUnits = GetComponentsInChildren<Unit>();
         foreach (var unit in childUnits)
@@ -37,8 +41,8 @@ public class ServerController : MonoBehaviour
         Map = Map.Brownian(50, 50, 0.5f);
         var mapGo = new GameObject("Map");
         mapGo.transform.SetParent(transform);
-        var mr = gameObject.AddComponent<MeshRenderer>();
-        var mf = gameObject.AddComponent<MeshFilter>();
+        var mr = mapGo.AddComponent<MeshRenderer>();
+        var mf = mapGo.AddComponent<MeshFilter>();
         mf.mesh = Map.HeightMapMesh();
     }
 
@@ -72,6 +76,8 @@ public class GameState
 // Used to position and animate unit on player side.
 public class UnitState
 {
+    public ushort TeamID;
+    public UnitType UnitType;
     public Vector3 Position;
     public float Orientation;
     // qq: may be worth storing directional data or current target.

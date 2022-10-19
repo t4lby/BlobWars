@@ -12,6 +12,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Unit : MonoBehaviour
 {
+    public bool IsServerUnit;
     public ushort TeamID; // The ID of the team this unit belongs to.
     public float HP;
     public UnitStance Stance;
@@ -51,11 +52,16 @@ public class Unit : MonoBehaviour
 
     private void Start()
     {
-        _server = GetComponentInParent<ServerController>();
+        if (IsServerUnit)
+        {
+            _server = GetComponentInParent<ServerController>();
+        }
     }
 
     private void Update()
     {
+        // QQ: don't animate server units!
+
         // depending on the unit state set the current animation.
         _animator.SetBool("Walk", Stance == UnitStance.Walk);
         _animator.SetBool("Attack", Stance == UnitStance.Attack);
@@ -75,6 +81,10 @@ public class Unit : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!IsServerUnit)
+        {
+            return; // no fixed update cycle for non server units.
+        }
         Vector3 moveVector = transform.position;
         // Simple initial state machine
         switch (Stance)
@@ -247,6 +257,12 @@ public class Unit : MonoBehaviour
         }
         return false;
     }
+}
+
+public enum UnitType
+{
+    Villager = 0,
+    Warrior = 1
 }
 
 public enum UnitStance

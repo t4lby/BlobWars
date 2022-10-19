@@ -226,7 +226,7 @@ public struct Map
 // content to be displayed and the data in MapData.Data 
 public enum TileType
 {
-    Clear = 0,
+    Clear = 0, 
     Tree = 1
 }
 

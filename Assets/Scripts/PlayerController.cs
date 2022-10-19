@@ -8,6 +8,7 @@ using System.Collections.Generic;
 [RequireComponent(typeof(MouseDragSelection))]
 public class PlayerController : MonoBehaviour
 {
+
     // Dev target selection of unit and indication of that selection.
     // CLICK SELECTION (via game camera)
     // DRAG SELECTION.
@@ -15,6 +16,14 @@ public class PlayerController : MonoBehaviour
 
     public List<ushort> SelectedUnits;
 
+    /// <summary>
+    /// Display version of units, colliders should be disabled for these units.
+    /// (do this on spawn).
+    /// </summary>
+    public Dictionary<ushort, Unit> DisplayUnits = new Dictionary<ushort, Unit>();
+
+    // At the moment we are using server.gamestate and server.map, this should be
+    // retrieved cyclicly in future from server via socket?
     private ServerController _server;
 
     // Use this for initialization
@@ -23,6 +32,45 @@ public class PlayerController : MonoBehaviour
         _mouseDragSelection = GetComponent<MouseDragSelection>();
         _mouseDragSelection.OnSelectionEnd += OnMouseDragSelect;
         _server = FindObjectOfType<ServerController>();
+    }
+
+    private void Start()
+    {
+        CloneServerMap();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // Pull unit information from server. (temp offline is just server.gamestate)
+        var gameState = _server.GameState;
+        foreach (ushort unitID in gameState.UnitStates.Keys)
+        {
+            var unitState = gameState.UnitStates[unitID];
+            if (!DisplayUnits.ContainsKey(unitID))
+            {
+                // instantiate unit.
+                var unit =
+                    Instantiate(GameData.Main.UnitPrefabs[(int)unitState.UnitType])
+                    .GetComponent<Unit>();
+                unit.transform.SetParent(transform);
+                unit.IsServerUnit = false;
+                unit.GetComponent<Collider>().enabled = false;
+                DisplayUnits[unitID] = unit;
+            }
+            // Update unit position, rotation, hp etc.
+            var dispUnit = DisplayUnits[unitID];
+            dispUnit.transform.position = unitState.Position;
+            dispUnit.transform.rotation = Quaternion.Euler(0, unitState.Orientation, 0);
+            dispUnit.Stance = unitState.Stance;
+        }
+
+        // QQ: check for units to be deleted from display units.
+
+
+        // Update selection graphics for player.
+
+
     }
 
     private void OnMouseDragSelect(Rect rect)
@@ -62,32 +110,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void CloneServerMap()
     {
-        // Pull unit information from server. (temp offline is just server.gamestate)
-
-        
-        /*if (Input.GetMouseButtonUp(0))
+        // get child map if one already exists
+        var map = transform.Find("Map");
+        if (map == null)
         {
-            Ray selectionRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(selectionRay, out hit))
-            {
-                var unit = hit.transform.GetComponentInParent<Unit>();
-                if (unit != null)
-                {
-                    //SelectedUnits.Add();
-                }
-            }
-        }*/
-
-        // Update selection graphics for player.
-
-
+            map = new GameObject("Map").transform;
+        }
+        map.SetParent(transform);
+        var mr = map.gameObject.AddComponent<MeshRenderer>();
+        mr.material = GameData.Main.MapMaterial;
+        var mf = map.gameObject.AddComponent<MeshFilter>();
+        mf.mesh = _server.Map.HeightMapMesh();
     }
 
-    
+
 }
 
 public struct PlayerCommand

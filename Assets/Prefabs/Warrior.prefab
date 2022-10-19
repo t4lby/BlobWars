@@ -585,9 +585,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01053cc08be054c5b95e8a2a22c6e133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsServerUnit: 1
   TeamID: 0
   HP: 50
-  State: 2
+  Stance: 0
   Target: {fileID: 0}
   MaxHP: 50
   MoveSpeed: 0.7
