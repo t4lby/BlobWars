@@ -14,7 +14,7 @@ public class Unit : MonoBehaviour
 {
     public ushort TeamID; // The ID of the team this unit belongs to.
     public float HP;
-    public UnitState State;
+    public UnitStance Stance;
     /// <summary>
     /// If a unit has no target (null) it will stay Idle, once a target is set the unit
     /// will walk toward the target via whatever path finding is available.
@@ -57,15 +57,15 @@ public class Unit : MonoBehaviour
     private void Update()
     {
         // depending on the unit state set the current animation.
-        _animator.SetBool("Walk", State == UnitState.Walk);
-        _animator.SetBool("Attack", State == UnitState.Attack);
+        _animator.SetBool("Walk", Stance == UnitStance.Walk);
+        _animator.SetBool("Attack", Stance == UnitStance.Attack);
 
         // sync walk animation to walk speed, and attack animation to attack speed.
-        switch (State)
+        switch (Stance)
         {
-            case UnitState.Attack:
+            case UnitStance.Attack:
                 _animator.speed = AttackRate * _attackAnimLength; break; //ensures 1 attack anim per attack.
-            case UnitState.Walk:
+            case UnitStance.Walk:
                 _animator.speed = MoveSpeed * WalkAnimSpeedMultiplier * _walkAnimLength; break; //ensures 1 walk anim per meter walked.
             default:
                 _animator.speed = 1;
@@ -77,23 +77,23 @@ public class Unit : MonoBehaviour
     {
         Vector3 moveVector = transform.position;
         // Simple initial state machine
-        switch (State)
+        switch (Stance)
         {
-            case UnitState.Idle:
+            case UnitStance.Idle:
                 {
                     // keep unit at correct height for map.
                     
                     if (Target != null)
                     {
-                        State = UnitState.Walk;
+                        Stance = UnitStance.Walk;
                     }
                     break;
                 }
-            case UnitState.Walk:
+            case UnitStance.Walk:
                 {
                     if (Target == null)
                     {
-                        State = UnitState.Idle; // transition back to idle.
+                        Stance = UnitStance.Idle; // transition back to idle.
                         break;
                     }
                     //move over height map and move in direction
@@ -113,18 +113,18 @@ public class Unit : MonoBehaviour
                     if (distFromTarget < AttackRange &&
                         TargetIsEnemy())
                     {
-                        State = UnitState.Attack;
+                        Stance = UnitStance.Attack;
                     }
                     if (distFromTarget < /*two radii combined plus buffer */0.9f &&
                         !TargetIsEnemy())
                     {
                         // arriving at non enemy target.
                         Target = null;
-                        State = UnitState.Idle;
+                        Stance = UnitStance.Idle;
                     }
                     break;
                 }
-            case UnitState.Attack:
+            case UnitStance.Attack:
                 {
                     // if no attack cycle running and target is enemy unit,
                     //      save reference to target and start attack cycle.
@@ -142,7 +142,7 @@ public class Unit : MonoBehaviour
                         // move to idle.
                         if (Target.transform != _attackCycle.Attackee.transform)
                         {
-                            State = UnitState.Idle;
+                            Stance = UnitStance.Idle;
                         }
                         else
                         {
@@ -154,7 +154,7 @@ public class Unit : MonoBehaviour
                             //and transition to walk.
                             if (_attackCycle.AttackStartTime + 1f / AttackRate <= Time.fixedTime)
                             {
-                                State = UnitState.Idle;
+                                Stance = UnitStance.Idle;
                                 _attackCycle = null;
                                 Target.GetComponent<Unit>().HP -= AttackPower;
                             }
@@ -249,7 +249,7 @@ public class Unit : MonoBehaviour
     }
 }
 
-public enum UnitState
+public enum UnitStance
 {
     Walk,
     Attack,
